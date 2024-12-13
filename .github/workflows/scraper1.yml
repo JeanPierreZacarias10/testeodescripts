@@ -31,11 +31,8 @@ jobs:
     - name: List repository files
       run: ls -R # Lista todos los archivos en el repositorio para verificar rutas
 
-    - name: Run scraper.py
-      run: python Scriptslogicos/ScritpsEjecucon/scraper.py
-
-    - name: Run scraper1.py
-      run: python Scriptslogicos/ScritpsEjecucon/scraper1.py
+    - name: Run scraper2.py
+      run: python Scriptslogicos/ScriptsEjecucon/scraper2.py
 
     - name: Save results as artifact
       uses: actions/upload-artifact@v3
