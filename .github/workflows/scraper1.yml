@@ -2,7 +2,7 @@ name: Run Web Scraper
 
 on:
   schedule:
-    - cron: '23 17 * * *' # Ejecuta diariamente a las 12:25 PM hora peruana (5:25 PM UTC)
+    - cron: '40 17 * * *' # Ejecuta diariamente a las 12:25 PM hora peruana (5:25 PM UTC)
   workflow_dispatch: # Permite ejecutarlo manualmente desde la interfaz de GitHub
 
 jobs:
@@ -29,10 +29,10 @@ jobs:
         sudo apt-get install -y chromium-browser
 
     - name: Run the scraper
-      run: python ScriptsEjecucon/scraper.py
+      run: python Scriptslogicos/ScriptsEjecucon/scraper.py
 
     - name: Save results as artifact
       uses: actions/upload-artifact@v3
       with:
         name: scraping-results
-        path: archivosscripts/*.csv
+        path: Scriptslogicos/archivosscripts/*.csv
