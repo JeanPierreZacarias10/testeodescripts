@@ -52,6 +52,57 @@ def extraer_productos():
             marca = prd.find_element(By.CLASS_NAME, "product-brand").text
             enlace = prd.find_element(By.TAG_NAME, "a").get_attribute("href")
             precio_texto = prd.find_element(By.CLASS_NAME, "spot-price").text
+            
+            # Validar y convertir precio
+            precio_texto_limpio = re.sub(r'[^\d.]', '', precio_texto)
+            precio_num = int(precio_texto_limpio) if precio_texto_limpio else None
+            
+            codigo = prd.find_element(By.CLASS_NAME, "check-compare__input").get_attribute("id")
+            codigo_corregido = codigo.replace("prod", "")
+        except NoSuchElementException:
+            continue  # Si algún elemento falla, pasa al siguiente producto
+
+        # Evitar agregar productos sin precio válido
+        if precio_num is None:
+            continue
+
+        # Almacenar la información en el diccionario
+        producto_info = {
+            'Pagina': str(pagina),
+            'Plataforma': 'ENTEL',
+            'Tipo': 'CELULARES',
+            'Fecha': now.date(),
+            'Hora': now.time(),
+            'Titulo': titulo.upper(),
+            'Marca': marca.upper(),
+            'Enlace': enlace,
+            'Precio Tarjeta': '',
+            'Precio Internet': precio_num,
+            'Precio Internet2': '',
+            'Precio Lista': '',
+            'Precio Lista2': '',
+            'Envío Gratis': 'No',
+            'Cuotas sin Interes': '',
+            'Vendedor': 'ENTEL',
+            'Codigo': codigo_corregido,
+        }
+        lista_productos.append(producto_info)
+
+    productos = driver.find_elements(By.CLASS_NAME, "card-plp")
+    for prd in productos:
+        # Verificar si está fuera de stock
+        try:
+            gris_class_element = prd.find_element(By.CLASS_NAME, "card-plp__gris")
+            continue
+        except NoSuchElementException:
+            pass  # No está agotado
+
+        # Extraer información del producto
+        try:
+            titulo = prd.find_element(By.CLASS_NAME, "product-name").text
+            marca = prd.find_element(By.CLASS_NAME, "product-brand").text
+            enlace = prd.find_element(By.TAG_NAME, "a").get_attribute("href")
+            precio_texto = prd.find_element(By.CLASS_NAME, "spot-price").text
             precio_num = int(re.sub(r'[^\d.]', '', precio_texto))
             codigo = prd.find_element(By.CLASS_NAME, "check-compare__input").get_attribute("id")
             codigo_corregido = codigo.replace("prod", "")
